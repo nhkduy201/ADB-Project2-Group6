@@ -156,11 +156,6 @@ add constraint FK_DG_KH
 foreign key(MaKhachHang)
 references KHACHHANG(MaKhachHang)
 
---alter table DANHGIA
---add constraint FK_DG_SPOL
---foreign key(MaSanPham)
---references SANPHAMONLINE(MaSanPham)
-
 alter table LICHSULUONG
 add constraint FK_LSL_NV
 foreign key(MaNhanVien)
@@ -191,20 +186,10 @@ add constraint FK_CTDT_PDH
 foreign key(MaPhieuDoiHang)
 references PHIEUDOIHANG(MaPhieuDoiHang)
 
---alter table CT_DOIHANG
---add constraint FK_CTDT_SP
---foreign key(MaSanPham)
---references SANPHAM(MaSanPham)
-
 alter table CT_NHANHANG
 add constraint FK_CTNH_PDH
 foreign key(MaPhieuDoiHang)
 references PHIEUDOIHANG(MaPhieuDoiHang)
-
---alter table CT_NHANHANG
---add constraint FK_CTNH_SP
---foreign key(MaSanPham)
---references SANPHAM(MaSanPham)
 
 alter table PHIEUNHAPHANG
 add constraint FK_PNH_NV
@@ -216,11 +201,6 @@ add constraint FK_CTNH_PNH
 foreign key(MaPhieuNhapHang)
 references PHIEUNHAPHANG(MaPhieuNhapHang)
 
---alter table CT_NHAPHANG
---add constraint FK_CTNH_SP
---foreign key(MaSanPham)
---references SANPHAM(MaSanPham)
-
 alter table PHIEUXUATHANG
 add constraint FK_PXH_NV
 foreign key(MaNhanVien)
@@ -230,8 +210,3 @@ alter table CT_XUATHANG
 add constraint FK_CTXH_PNH
 foreign key(MaPhieuXuatHang)
 references PHIEUXUATHANG(MaPhieuXuatHang)
-
---alter table CT_XUATHANG
---add constraint FK_CTXH_SP
---foreign key(MaSanPham)
---references SANPHAM(MaSanPham)
