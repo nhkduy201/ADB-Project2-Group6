@@ -9,10 +9,10 @@ go
 create table KHACHHANG
 (
 	MaKhachHang int,
-	HoTenKhachHang nvarchar(30),
+	HoTenKhachHang nvarchar(50),
 	SoDienThoaiKhachHang char(10),
-	NgaySinhKhachHang datetime,
-	DiaChiKhachHang nvarchar(50),
+	NgaySinhKhachHang date,
+	DiaChiKhachHang nvarchar(100),
 	DiemTichLuyKhachHang int,
 	constraint PK_KH primary key(MaKhachHang)
 )
@@ -36,18 +36,18 @@ create table DANHGIA
 (
 	MaKhachHang int,
 	MaSanPham int,
-	BinhLuan nvarchar(100),
 	ThoiDiemBinhLuan datetime,
-	constraint PK_DG primary key(MaKhachHang,MaSanPham)
+	BinhLuan nvarchar(200),
+	constraint PK_DG primary key(MaKhachHang,MaSanPham,ThoiDiemBinhLuan)
 )
 
 create table NHANVIEN
 (
 	MaNhanVien int,
-	TenNhanVien nvarchar(30),
+	TenNhanVien nvarchar(50),
 	SoDienThoaiNhanVien char(10),
-	CMND char(9),
-	LoaiNhanVien nvarchar(9) , --(Bán hàng,Tư vấn,Quản lý,Giao hàng)
+	CMND varchar(13),
+	LoaiNhanVien nvarchar(15) , --(Bán hàng,Tư vấn,Quản lý,Giao hàng)
 	HieuSuatLamViec float,
 	constraint PK_NV primary key(MaNhanVien)
 )
@@ -63,7 +63,7 @@ create table LICHSULUONG
 create table CHAMCONG
 (
 	MaNhanVien int,
-	NgayLamViec datetime,
+	NgayLamViec date,
 	constraint PK_CC primary key(MaNhanVien,NgayLamViec)
 )
 
@@ -73,8 +73,8 @@ create table HOADON
 	NgayLapHoaDon datetime,
 	DiemTichLuyHoaDon int,
 	TyLeGiamGia float,
-	LoaiHoaDon int,
-	HinhThucThanhToan nvarchar(8), --(Tiền mặt,Online)
+	LoaiHoaDon bit,
+	HinhThucThanhToan nvarchar(20), --(Tiền mặt,Online)
 	MaKhachHang int,
 	MaNhanVien int,
 	constraint PK_HD primary key(MaHoaDon)
@@ -83,7 +83,7 @@ create table HOADON
 create table PHIEUDOIHANG
 (
 	MaPhieuDoiHang int,
-	NgayDoiHang datetime,
+	NgayDoiHang date,
 	MaKhachHang int,
 	constraint PK_PDH primary key(MaPhieuDoiHang)
 )
@@ -93,7 +93,7 @@ create table CT_DOIHANG
 	MaPhieuDoiHang int,
 	MaSanPham int,
 	SoLuongDoiHang int,
-	DonGiaDoiHang float,
+	DonGiaDoiHang int,
 	constraint PK_CTDH primary key(MaPhieuDoiHang,MaSanPham)
 )
 
@@ -109,7 +109,7 @@ create table CT_NHANHANG
 create table PHIEUNHAPHANG
 (
 	MaPhieuNhapHang int,
-	NgayNhapHang datetime,
+	NgayNhapHang date,
 	MaNhanVien int,
 	constraint PK_PNH primary key(MaPhieuNhapHang)
 )
@@ -119,14 +119,14 @@ create table CT_NHAPHANG
 	MaPhieuNhapHang int,
 	MaSanPham int,
 	SoLuongNhap int,
-	DonGiaNhap float,
+	DonGiaNhap int,
 	constraint PK_CTNH primary key(MaPhieuNhapHang,MaSanPham)
 )
 
 create table PHIEUXUATHANG
 (
 	MaPhieuXuatHang int,
-	NgayXuatHang datetime,
+	NgayXuatHang date,
 	MaNhanVien int,
 	constraint PK_PXH primary key(MaPhieuXuatHang)
 )
@@ -136,7 +136,7 @@ create table CT_XUATHANG
 	MaPhieuXuatHang int,
 	MaSanPham int,
 	SoLuongXuat int,
-	DonGiaXuat float,
+	DonGiaXuat int,
 	constraint PK_CTXH primary key(MaPhieuXuatHang,MaSanPham)
 )
 
@@ -156,10 +156,10 @@ add constraint FK_DG_KH
 foreign key(MaKhachHang)
 references KHACHHANG(MaKhachHang)
 
---alter table DANHGIA
---add constraint FK_DG_SPOL
---foreign key(MaSanPham)
---references SANPHAMONLINE(MaSanPham)
+alter table DANHGIA
+add constraint FK_DG_SPOL
+foreign key(MaSanPham)
+references SANPHAMONLINE(MaSanPham)
 
 alter table LICHSULUONG
 add constraint FK_LSL_NV
@@ -191,20 +191,20 @@ add constraint FK_CTDT_PDH
 foreign key(MaPhieuDoiHang)
 references PHIEUDOIHANG(MaPhieuDoiHang)
 
---alter table CT_DOIHANG
---add constraint FK_CTDT_SP
---foreign key(MaSanPham)
---references SANPHAM(MaSanPham)
+alter table CT_DOIHANG
+add constraint FK_CTDT_SP
+foreign key(MaSanPham)
+references SANPHAM(MaSanPham)
 
 alter table CT_NHANHANG
 add constraint FK_CTNH_PDH
 foreign key(MaPhieuDoiHang)
 references PHIEUDOIHANG(MaPhieuDoiHang)
 
---alter table CT_NHANHANG
---add constraint FK_CTNH_SP
---foreign key(MaSanPham)
---references SANPHAM(MaSanPham)
+alter table CT_NHANHANG
+add constraint FK_CTNH_SP
+foreign key(MaSanPham)
+references SANPHAM(MaSanPham)
 
 alter table PHIEUNHAPHANG
 add constraint FK_PNH_NV
@@ -216,10 +216,10 @@ add constraint FK_CTNH_PNH
 foreign key(MaPhieuNhapHang)
 references PHIEUNHAPHANG(MaPhieuNhapHang)
 
---alter table CT_NHAPHANG
---add constraint FK_CTNH_SP
---foreign key(MaSanPham)
---references SANPHAM(MaSanPham)
+alter table CT_NHAPHANG
+add constraint FK_CTNH_SP
+foreign key(MaSanPham)
+references SANPHAM(MaSanPham)
 
 alter table PHIEUXUATHANG
 add constraint FK_PXH_NV
@@ -231,7 +231,7 @@ add constraint FK_CTXH_PNH
 foreign key(MaPhieuXuatHang)
 references PHIEUXUATHANG(MaPhieuXuatHang)
 
---alter table CT_XUATHANG
---add constraint FK_CTXH_SP
---foreign key(MaSanPham)
---references SANPHAM(MaSanPham)
+alter table CT_XUATHANG
+add constraint FK_CTXH_SP
+foreign key(MaSanPham)
+references SANPHAM(MaSanPham)
