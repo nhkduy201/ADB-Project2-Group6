@@ -3,7 +3,7 @@ go
 
 --Tạo bảng
 create table SANPHAM
-(	
+(
 	MaSanPham int,
 	MaLoai int,
 	MaNhaCungCap int,
@@ -17,7 +17,7 @@ create table SANPHAM
 )
 
 create table LOAISANPHAM
-(	
+(
 	MaLoai int,
 	MaLoaiCapCha int,
 	TenLoai nvarchar(30),
@@ -91,7 +91,7 @@ create table TAIKHOANDANGNHAP
 	MaNhanVien int,
 	MatKhau text,
 	HinhThucDangKy nvarchar(20),
-	LoaiTaiKhoan int,
+	LoaiTaiKhoan bit,
 	constraint PK_TKDN primary key(TenDangNhap)
 )
 
