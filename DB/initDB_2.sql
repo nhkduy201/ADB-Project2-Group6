@@ -81,7 +81,8 @@ create table GIAOHANG
 	SoDienThoaiNguoiNhan char(10),
 	NgayNhanHang date,
 	NgayXacNhanDatHang date,
-	constraint PK_GiaoHang primary key(MaGiaoHang)
+	constraint PK_GiaoHang primary key(MaGiaoHang),
+	constraint NXNDH_Before_NNH check(NgayXacNhanDatHang < NgayNhanHang)
 )
 
 create table TAIKHOANDANGNHAP
