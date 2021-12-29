@@ -73,6 +73,7 @@ create table HOADON
 	TyLeGiamGia float,
 	LoaiHoaDon bit,
 	HinhThucThanhToan nvarchar(20), --(Tiền mặt,Online)
+	TongTien int,
 	MaKhachHang int,
 	MaNhanVien int,
 	constraint PK_HD primary key(MaHoaDon)
