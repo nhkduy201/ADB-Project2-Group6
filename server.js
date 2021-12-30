@@ -1,30 +1,42 @@
-const express = require("express");
+import express from "express";
+import morgan from 'morgan';
+import viewMdw from "./middlewares/view.mdw.js";
+import loginModels from "./models/login.models.js";
 
 const app = express();
 
-require("dotenv").config();
-const sql = require("mssql");
-const sqlConfig = {
-  user: process.env.DB_USER,
-  password: process.env.DB_PWD,
-  database: process.env.DB_NAME,
-  server: "localhost",
-  options: {
-    trustServerCertificate: true,
-  },
-};
+app.use(morgan('dev'));
+app.use(express.urlencoded({
+    extended: true
+}));
+
+viewMdw(app);
 
 app.get("/", async (req, res) => {
-  try {
-    // make sure that any items are correctly URL encoded in the connection string
-    await sql.connect(sqlConfig);
-    const donhang = await sql.query`select * from TRIANKHACHHANG`;
-    res.json(donhang["recordset"][0]);
-  } catch (err) {
-    res.send("error");
-  }
+    res.render("login")
 });
 
+app.post("/login", async function (req, res){
+    const username = req.body.txtUsername;
+    const password = req.body.txtPassword;
+    const obj = await loginModels.getAllAccount(username, password);
+    console.log(obj);
+    if (obj.rowsAffected[0] !== 0){
+        if (obj.recordset[0].MaKhachHang !== null){
+            console.log("Khach hang");
+            res.render("customer");
+        }
+        else{
+            console.log("Nhan vien");
+        }
+    }
+    else{
+        res.render("login", {err_message: "Username or password does not match"});
+    }
+});
+
+const port = 3000;
+
 app.listen(3000, () => {
-  console.log("listen at port 3000");
+  console.log(`Example app listening at http://localhost:${port}`);
 });
