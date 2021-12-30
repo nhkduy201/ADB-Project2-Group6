@@ -73,7 +73,6 @@ create table HOADON
 	TyLeGiamGia float,
 	LoaiHoaDon bit,
 	HinhThucThanhToan nvarchar(20), --(Tiền mặt,Online)
-	TongTien int,
 	MaKhachHang int,
 	MaNhanVien int,
 	constraint PK_HD primary key(MaHoaDon)
@@ -223,12 +222,12 @@ create table GIAOHANG
 	constraint PK_GiaoHang primary key(MaGiaoHang)
 )
 
-create table TAIKHOANDANGNHAP
+CREATE table TAIKHOANDANGNHAP
 (
 	TenDangNhap varchar(30),
 	MaKhachHang int,
 	MaNhanVien int,
-	MatKhau text,
+	MatKhau varchar(50),
 	HinhThucDangKy nvarchar(20),
 	LoaiTaiKhoan bit,
 	constraint PK_TKDN primary key(TenDangNhap)
@@ -345,6 +344,11 @@ alter table dbo.TAIKHOANDANGNHAP
 add constraint FK_TKDN_KH
 foreign key(MaKhachHang)
 references dbo.KHACHHANG(MaKhachHang)
+
+alter table dbo.TAIKHOANDANGNHAP
+add constraint FK_TKDN_NV
+foreign key(MaNhanVien)
+references dbo.NHANVIEN(MaNhanVien)
 
 alter table dbo.CT_DOIHANG
 add constraint FK_CTDH_PDH
