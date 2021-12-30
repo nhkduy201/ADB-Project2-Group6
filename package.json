@@ -1,0 +1,28 @@
+{
+  "name": "adb-project2-group6",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nhkduy201/ADB-Project2-Group6.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nhkduy201/ADB-Project2-Group6/issues"
+  },
+  "homepage": "https://github.com/nhkduy201/ADB-Project2-Group6#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "mssql": "^7.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
