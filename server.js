@@ -28,6 +28,7 @@ app.post("/login", async function (req, res){
         }
         else{
             console.log("Nhan vien");
+            res.render("staff");
         }
     }
     else{
