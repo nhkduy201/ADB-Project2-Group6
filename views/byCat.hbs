@@ -1,0 +1,61 @@
+<div class="card">
+    <h4 class="card-header">
+        Sub Categories
+    </h4>
+    <div class="list-group list-group-flush">
+        {{#each this.subType}}
+            <a href="/products/bycat?id={{MaLoai}}&page=1" class="list-group-item list-group-item-action {{#if isActive}} active {{/if}}">
+                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                {{TenLoai}}
+            </a>
+        {{/each}}
+    </div>
+</div>
+
+<div class="card mt-3">
+    <h4 class="card-header d-flex justify-content-between">
+        Products
+        <a class="btn btn-sm btn-outline-primary" href="/admin/products/add" role="button">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            Add Product
+        </a>
+    </h4>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Product</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Description</th>
+            <th scope="col">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each this.products}}
+            <tr>
+                <th scope="row">{{MaSanPham}}</th>
+                <td>{{TenSanPham}}</td>
+                <td>{{SoLuongTon}}</td>
+                <td>{{MoTaChiTiet}}</td>
+                <td class="text-right">
+                    <a class="btn btn-sm btn-primary" href="/admin/products/edit?id={{MaSanPham}}" role="button">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="card-footer text-muted">
+        <div class="d-flex justify-content-between">
+            <a href="/products/bycat?id={{this.type}}&page={{this.prev}}" class="btn btn-success" role="button">
+                <i class="fa fa-backward" aria-hidden="true"></i>
+                Prev
+            </a>
+            <a href="/products/bycat?id={{this.type}}&page={{this.next}}" class="btn btn-primary" role="button">
+                <i class="fa fa-forward" aria-hidden="true"></i>
+                Next
+            </a>
+        </div>
+    </div>
+</div>

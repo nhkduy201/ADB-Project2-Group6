@@ -38,7 +38,13 @@ export default {
     async addAccount(username, password, id){
         await sql.connect(sqlConfig);
         const ret = await sql.query`insert into TaiKhoanDangNhap(TenDangNhap, MaKhachHang, MaNhanVien, MatKhau, HinhThucDangKy, LoaiTaiKhoan)
-                                    values (${username}, ${id}, null, ${password}, 'Số Điện Thoại', 0)`;
+                                    values (${username}, ${id}, null, ${password}, N'Số Điện Thoại', 0)`;
         return ret;
+    },
+
+    async findEmployeeById(id){
+        await sql.connect(sqlConfig);
+        const obj = await sql.query`select * from NhanVien where MaNhanVien = ${id}`;
+        return obj;
     }
 };
