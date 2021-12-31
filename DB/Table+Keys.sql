@@ -151,6 +151,7 @@ create table SANPHAM
 	DonViDoLuong nvarchar(10),
 	MoTaChiTiet text,
 	LoaiSanPham int,
+	TinhTrang bit,
 	constraint PK_SP primary key(MaSanPham)
 )
 
