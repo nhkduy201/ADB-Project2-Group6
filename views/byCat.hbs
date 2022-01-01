@@ -4,7 +4,7 @@
     </h4>
     <div class="list-group list-group-flush">
         {{#each this.subType}}
-            <a href="/products/bycat?id={{MaLoai}}&page=1" class="list-group-item list-group-item-action {{#if isActive}} active {{/if}}">
+            <a href="/admin/products/bycat?id={{MaLoai}}&page=1" class="list-group-item list-group-item-action {{#if isActive}} active {{/if}}">
                 <i class="fa fa-caret-right" aria-hidden="true"></i>
                 {{TenLoai}}
             </a>
@@ -51,11 +51,11 @@
     </table>
     <div class="card-footer text-muted">
         <div class="d-flex justify-content-between">
-            <a href="/products/bycat?id={{this.type}}&page={{this.prev}}" class="btn btn-success" role="button">
+            <a href="/admin/products/bycat?id={{this.type}}&page={{this.prev}}" class="btn btn-success" role="button">
                 <i class="fa fa-backward" aria-hidden="true"></i>
                 Prev
             </a>
-            <a href="/products/bycat?id={{this.type}}&page={{this.next}}" class="btn btn-primary" role="button">
+            <a href="/admin/products/bycat?id={{this.type}}&page={{this.next}}" class="btn btn-primary" role="button">
                 <i class="fa fa-forward" aria-hidden="true"></i>
                 Next
             </a>

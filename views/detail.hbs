@@ -1,0 +1,75 @@
+<div class="card"
+  <h4 class="card-header">
+    {{this.product.ProName}}
+  </h4>
+  <div class="card-body">
+    <div class="d-flex">
+      <img style="width: 350px;" src="/public/img/goods.jpg" alt="{{this.product.TenSanPham}}" title="{{this.product.TenSanPham}}">
+      <div class='ml-4'>
+        <p class="display-4 mt-2">
+            <span class="font-weight-bold text-primary">{{this.product.TenSanPham}}</span>
+          </p>
+        <p class="h4 mt-2">
+         <span class="font-weight-bold text-danger">{{format_price this.product.GiaHienTai}} VND</span>
+        </p>
+      </div>
+    </div>
+    <h5 class="mt-4 font-weight-bold text-primary">Thông tin chi tiết</h5>
+    <p class="card-text">
+      Tồn kho: {{this.product.SoLuongTon}}
+    </p>
+    <p class="card-text">
+      Loại: {{this.product.TenLoai}}
+    </p>
+    <p class="card-text">
+      Nhà cung cấp: {{this.product.TenNhaCungCap}}
+    </p>
+    <p class="card-text">
+      Quốc gia sản xuất: {{this.product.QuocGiaSanXuat}}
+    </p>
+    <p class="card-text">
+      Quốc gia cung cấp: {{this.product.QuocGiaCungCap}}
+    </p>
+    <p class="card-text">
+      Kích thước: {{this.product.KichThuoc}} {{this.product.DonViDoLuong}}
+    </p>
+    <p class="card-text">
+      Mô tả: {{{this.product.MoTaChiTiet}}}
+    </p>
+    <h5 class="font-weight-bold text-danger">Khuyến Mãi</h5>
+    {{#if sale}}
+    <p class="card-text">
+      Hình thức: {{{this.product.HinhThucKhuyenMai}}}
+    </p>
+    {{/if}}
+    <p class="card-text">
+      Số lượng còn lại: {{{this.product.SoLuongHangConLai}}}
+    </p>
+    <p class="card-text">
+      Giảm giá: {{{format_percent this.product.PhanTramGiamGia}}}
+    </p>
+    <p class="card-text">
+      Thời gian kết thúc: {{{this.product.ThoiGianKetThuc}}}
+    </p>
+    {{#if auth}}
+      <form action="/cart/add" method="post">
+        <div class="row form-group">
+          <div class="col-sm-4">
+            <input type="hidden" value="{{this.product.MaSanPham}}" name="id">
+            <div class="input-group">
+              <input type="number" class="form-control" name="quantity" placeholder="Quantity" value="1" min="1">
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-outline-primary">
+                  Add to cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    {{/if}}
+  </div>
+  <div class="card-footer text-muted">
+    2 days ago
+  </div>
+</div>

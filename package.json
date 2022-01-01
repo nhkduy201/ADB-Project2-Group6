@@ -19,13 +19,16 @@
   },
   "homepage": "https://github.com/nhkduy201/ADB-Project2-Group6#readme",
   "dependencies": {
+    "connect-mssql-v2": "^3.1.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "express-handlebars": "^6.0.2",
     "express-handlebars-sections": "^1.0.1",
+    "express-session": "^1.17.2",
     "moment": "^2.29.1",
     "morgan": "^1.10.0",
-    "mssql": "^7.3.0"
+    "mssql": "^7.3.0",
+    "numeral": "^2.0.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

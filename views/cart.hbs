@@ -1,0 +1,65 @@
+{{#section 'js'}}
+  <script>
+    $('.delItem').on('click', function (e) {
+      const id = $(this).data('id');
+      $('#txtDelProID').val(id);
+      $('#frmDelItem').submit();
+    });
+  </script>
+{{/section}}
+
+<div class="card">
+  <h4 class="card-header">
+    Shopping Cart
+  </h4>
+  {{#if this.empty}}
+    <div class="card-body d-flex justify-content-center">
+      <h5 class="card-title">Giỏ hàng trống</h5>
+    </div>
+  {{else}}
+    <form action="/cart/del" method="post" id="frmDelItem">
+      <input type="hidden" id="txtDelProID" name="id">
+    </form>
+    <div class="card-body">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Amount</th>
+            <th scope="col">&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each this.items}}
+            <tr>
+              <td>
+                <a href="/products/detail/{{MaSanPham}}">
+                  {{TenSanPham}}
+                </a>
+              </td>
+              <td>{{format_price DonGiaTrongGio}}</td>
+              <td>{{SoLuongTrongGio}}</td>
+              <td>{{format_price ThanhTien}}</td>
+              <td class="text-right">
+                <a data-id="{{MaSanPham}}" class="btn btn-sm btn-danger delItem" href="javascript:;" role="button">
+                  <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </a>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  {{/if}}
+  <div class="card-footer text-muted d-flex justify-content-between">
+    <span>{{!-- 2 days ago --}}</span>
+    <form action="/cart/checkout" method="post">
+      <button type="submit" class="btn btn-outline-success">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        Check out
+      </button>
+    </form>
+  </div>
+</div>

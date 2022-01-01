@@ -10,7 +10,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
-    <a class="navbar-brand" href="/admin/products/1">
+    <a class="navbar-brand" href="/products/customer/bycat">
         <i class="fa fa-home fa-lg" aria-hidden="true"></i>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="/admin/products/1">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/products/customer/bycat">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Link</a>
@@ -49,12 +49,12 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/cart/">
                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                        Shopping cart: <b>{{cartSummary}} item(s)</b>
+                        Shopping cart: <b>{{authUser.SoLuongLoaiHangTrongGio}} item(s)</b>
                     </a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-                        Hi, <b>{{authUser.name}}!</b>
+                        Hi, <b>{{authUser.HoTenKhachHang}}!</b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/account/profile">
@@ -95,7 +95,7 @@
                 </h4>
                 <div class="list-group list-group-flush">
                     {{#each ParentType}}
-                        <a href="/products/admin/bycat?id={{MaLoai}}&page=1" class="list-group-item list-group-item-action {{#if isActive}} active {{/if}}">
+                        <a href="/products/customer/bycat?id={{MaLoai}}&page=1" class="list-group-item list-group-item-action {{#if isActive}} active {{/if}}">
                             <i class="fa fa-caret-right" aria-hidden="true"></i>
                             {{TenLoai}}
                         </a>
@@ -116,7 +116,7 @@
             </div>
         </div>
         <div class="col-sm-9 mb-3">
-            {{{body}}}
+          {{{body}}}
         </div>
     </div>
 </div>

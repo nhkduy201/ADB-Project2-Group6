@@ -1,1 +1,82 @@
-<p>Continue...</p>
+{{#section 'js'}}
+  <script>
+    $('.addItem').on('click', function (e) {
+      const id = $(this).data('id');
+      $('#txtProID').val(id);
+      $('#frmAddItem').submit();
+    });
+  </script>
+{{/section}}
+
+<div class="card">
+  <h4 class="card-header">
+      Sub Categories
+  </h4>
+  <div class="list-group list-group-flush">
+      {{#each this.subType}}
+          <a href="/products/customer/bycat?id={{MaLoai}}&page=1" class="list-group-item list-group-item-action {{#if isActive}} active {{/if}}">
+              <i class="fa fa-caret-right" aria-hidden="true"></i>
+              {{TenLoai}}
+          </a>
+      {{/each}}
+  </div>
+</div>
+
+<div class="card mt-3">
+    <h4 class="card-header d-flex justify-content-between">
+        Products
+    </h4>
+    <div class="card-body">
+    {{#if this.empty}}
+      <h5 class="card-title">Không có dữ liệu</h5>
+      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    {{else}}
+      <form action="/cart/add" method="post" id="frmAddItem">
+        <input type="hidden" id="txtProID" name="id">
+        <input type="hidden" name="quantity" value="1">
+      </form>
+      <div class="row">
+        {{#each this.products}}
+          <div class="col-sm-4 mb-3">
+            <div class="card h-100">
+              <img class="card-img-top" src="/public/img/goods.jpg" alt="{{TenSanPham}}" title="{{TenSanPham}}">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 class="card-title">{{TenSanPham}}</h5>
+                    <h5 class="card-title" style="color: #ff3385">{{format_price GiaHienTai}} VND</h5>
+                  </div>
+                  <h5 class="card-title text-danger">-{{format_percent PhanTramGiamGia}}</h5>
+                </div>
+                <p class="card-text">{{MoTaChiTiet}}</p>
+              </div>
+              <div class="card-footer text-muted">
+                <a class="btn btn-md btn-primary" href="/products/detail/{{MaSanPham}}" role="button">
+                  Details
+                </a>
+                {{#if ../auth}}
+                  <a data-id="{{MaSanPham}}" class="btn btn-md btn-success addItem" href="javascript:;" role="button">
+                    <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                    Add to cart
+                  </a>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    {{/if}}
+  </div>
+    <div class="card-footer text-muted">
+        <div class="d-flex justify-content-between">
+            <a href="/products/customer/bycat?id={{this.type}}&page={{this.prev}}" class="btn btn-success" role="button">
+                <i class="fa fa-backward" aria-hidden="true"></i>
+                Prev
+            </a>
+            <a href="/products/customer/bycat?id={{this.type}}&page={{this.next}}" class="btn btn-primary" role="button">
+                <i class="fa fa-forward" aria-hidden="true"></i>
+                Next
+            </a>
+        </div>
+    </div>
+</div>
