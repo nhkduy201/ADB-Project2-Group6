@@ -65,7 +65,7 @@ export default {
     async addProduct(id, name, type, supplier, country, size, count, des, price){
         await sql.connect(sqlConfig);
         const obj = await sql.query`insert into SanPham values (${id}, ${type}, ${supplier}, ${name}, 0, ${country}, ${size}, 
-                            ${count}, ${des}, 1, 1)`;
+                            ${count}, ${des}, 1, 1, ${price})`;
         var d = new Date();
         d.setHours(d.getHours() + 7);
         const obj2 = await sql.query`insert into LichSuGia values (${id}, ${d}, ${price})`;
@@ -78,11 +78,20 @@ export default {
         return obj;
     },
 
-    async updateProduct(id, name, type, supplier, country, size, count, des){
+    async updateProduct(id, name, type, supplier, country, size, count, des, price, flag){
         await sql.connect(sqlConfig);
-        const obj = await sql.query`update SANPHAM set TenSanPham = ${name}, MaLoai = ${type},
-                    MaNhaCungCap = ${supplier}, QuocGiaSanXuat = ${country}, KichThuoc = ${size},
-                    DonViDoLuong = ${count}, MoTaChiTiet = ${des} where MaSanPham = ${id}`;
-        return obj;
+        if (flag){
+            const obj = await sql.query`update SANPHAM set TenSanPham = ${name}, MaLoai = ${type},
+                        MaNhaCungCap = ${supplier}, QuocGiaSanXuat = ${country}, KichThuoc = ${size},
+                        DonViDoLuong = ${count}, MoTaChiTiet = ${des}, GiaSanPham = ${price} where MaSanPham = ${id}`;
+            var d = new Date();
+            d.setHours(d.getHours() + 7);
+            const obj2 = await sql.query`insert into LichSuGia values (${id}, ${d}, ${price})`;
+        }
+        else{
+            const obj = await sql.query`update SANPHAM set TenSanPham = ${name}, MaLoai = ${type},
+                        MaNhaCungCap = ${supplier}, QuocGiaSanXuat = ${country}, KichThuoc = ${size},
+                        DonViDoLuong = ${count}, MoTaChiTiet = ${des} where MaSanPham = ${id}`;
+        }
     }
 };

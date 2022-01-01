@@ -100,7 +100,13 @@ app.post("/admin/products/patch", async function (req, res){
     const size = req.body.ProSize;
     const count = req.body.ProCount;
     const des = req.body.ProDes;
-    const ret = ProductModels.updateProduct(id, name, type, supplier, country, size, count, des);
+    const price = req.body.ProPrice;
+    const obj = await ProductModels.findProductById(id);
+    const product = obj.recordset[0];
+    var flag = true;
+    if (product.GiaSanPham == price)
+        flag = false;
+    await ProductModels.updateProduct(id, name, type, supplier, country, size, count, des, price, flag);
     res.redirect("/admin/products/1");
 });
 
