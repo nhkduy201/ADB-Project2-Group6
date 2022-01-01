@@ -93,5 +93,15 @@ export default {
                         MaNhaCungCap = ${supplier}, QuocGiaSanXuat = ${country}, KichThuoc = ${size},
                         DonViDoLuong = ${count}, MoTaChiTiet = ${des} where MaSanPham = ${id}`;
         }
+    },
+
+    async getAllPriceHistory(id, limit){
+        await sql.connect(sqlConfig);
+        var obj;
+        if (limit === 5)
+            obj = await sql.query`select * from LICHSUGIA where MaSanPham = ${id} order by ThoiDiemThayDoiGia DESC offset 0 rows fetch next ${limit} rows only`;
+        else
+            obj = await sql.query`select * from LICHSUGIA where MaSanPham = ${id} order by ThoiDiemThayDoiGia DESC`;
+        return obj;
     }
 };

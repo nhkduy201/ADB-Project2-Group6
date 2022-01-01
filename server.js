@@ -1,5 +1,7 @@
 import express from "express";
 import morgan from 'morgan';
+import moment from 'moment';
+
 import viewMdw from "./middlewares/view.mdw.js";
 import localMdw from "./middlewares/local.mdw.js";
 import AuthModels from "./models/auth.models.js";
@@ -108,6 +110,24 @@ app.post("/admin/products/patch", async function (req, res){
         flag = false;
     await ProductModels.updateProduct(id, name, type, supplier, country, size, count, des, price, flag);
     res.redirect("/admin/products/1");
+});
+
+app.get("/admin/products/history", async function(req, res){
+    const id = req.query.id;
+    const show = req.query.show || "top-5";
+    if (show === "top-5")
+        var limit = 5;
+    const obj = await ProductModels.getAllPriceHistory(id, limit);
+    var products = obj.recordset;
+    for (var i = 0; i < products.length; i++) {
+        products[i].No = i + 1;
+        products[i].ThoiDiemThayDoiGia = moment(products[i].ThoiDiemThayDoiGia).format('DD/MM/YYYY HH:mm:ss');
+    }
+    res.render("history", {
+        layout: "bs4.hbs",
+        products,
+        id
+    });
 });
 
 app.get("/admin/products/:page", async function (req, res){

@@ -23,6 +23,7 @@
     "express": "^4.17.2",
     "express-handlebars": "^6.0.2",
     "express-handlebars-sections": "^1.0.1",
+    "moment": "^2.29.1",
     "morgan": "^1.10.0",
     "mssql": "^7.3.0"
   },
