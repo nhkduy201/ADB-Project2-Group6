@@ -103,5 +103,23 @@ export default {
         else
             obj = await sql.query`select * from LICHSUGIA where MaSanPham = ${id} order by ThoiDiemThayDoiGia DESC`;
         return obj;
+    },
+
+    async getMaxDate(){
+        await sql.connect(sqlConfig);
+        const obj1 = await sql.query`select max(NgayLapHoaDon) from HoaDon`;
+        const obj2 = await sql.query`select max(NgayDoiHang) from PhieuDoiHang`;
+        const obj3 = await sql.query`select max(NgayNhapHang) from PhieuNhapHang`;
+        const obj4 = await sql.query`select max(NgayXuatHang) from PhieuXuatHang`;
+        return [obj1, obj2, obj3, obj4];
+    },
+
+    async getAllOutcome(year, month){
+        await sql.connect(sqlConfig);
+        const obj1 = await sql.query`select sum(cast(TongTien as BIGINT)) as SUM from HoaDon where Year(NgayLapHoaDon) = ${year} and Month(NgayLapHoaDon) = ${month}`;
+        const obj2 = await sql.query`select sum(cast(TongTien as BIGINT)) as SUM from PhieuDoiHang where Year(NgayDoiHang) = ${year} and Month(NgayDoiHang) = ${month}`;
+        const obj3 = await sql.query`select sum(cast(TongTien as BIGINT)) as SUM from PhieuNhapHang where Year(NgayNhapHang) = ${year} and Month(NgayNhapHang) = ${month}`;
+        const obj4 = await sql.query`select sum(cast(TongTien as BIGINT)) as SUM from PhieuXuatHang where Year(NgayXuatHang) = ${year} and Month(NgayXuatHang) = ${month}`;
+        return [obj1, obj2, obj3, obj4];
     }
 };

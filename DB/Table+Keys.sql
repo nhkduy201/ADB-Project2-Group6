@@ -75,6 +75,7 @@ create table HOADON
 	HinhThucThanhToan nvarchar(20), --(Tiền mặt,Online)
 	MaKhachHang int,
 	MaNhanVien int,
+	TongTien int,
 	constraint PK_HD primary key(MaHoaDon)
 )
 
@@ -84,6 +85,7 @@ create table PHIEUDOIHANG
 	NgayDoiHang date,
 	MaKhachHang int,
 	MaNhanVien int,
+	TongTien int,
 	constraint PK_PDH primary key(MaPhieuDoiHang)
 )
 
@@ -101,7 +103,7 @@ create table CT_NHANHANG
 	MaPhieuDoiHang int,
 	MaSanPham int,
 	SoLuongNhanHang int,
-	DonGiaNhanHang float,
+	DonGiaNhanHang int,
 	constraint PK_CT_NH primary key(MaPhieuDoiHang,MaSanPham)
 )
 
@@ -110,6 +112,7 @@ create table PHIEUNHAPHANG
 	MaPhieuNhapHang int,
 	NgayNhapHang date,
 	MaNhanVien int,
+	TongTien int,
 	constraint PK_PNH primary key(MaPhieuNhapHang)
 )
 
@@ -127,6 +130,7 @@ create table PHIEUXUATHANG
 	MaPhieuXuatHang int,
 	NgayXuatHang date,
 	MaNhanVien int,
+	TongTien int,
 	constraint PK_PXH primary key(MaPhieuXuatHang)
 )
 

@@ -130,6 +130,67 @@ app.get("/admin/products/history", async function(req, res){
     });
 });
 
+app.get("/admin/products/statistic", async function(req, res){
+    const obj = await ProductModels.getMaxDate();
+    const maxDate1 = moment(obj[0].recordset[0]['']);
+    const maxDate2 = moment(obj[1].recordset[0]['']);
+    const maxDate3 = moment(obj[2].recordset[0]['']);
+    const maxDate4 = moment(obj[3].recordset[0]['']);
+
+    var startDate = moment('2020-01-01');
+    const endDate = moment.max(maxDate1, maxDate2, maxDate3, maxDate4);
+
+    var result = [];
+
+    while (startDate.isBefore(endDate)) {
+        result.push(startDate.format("YYYY-MM"));
+        startDate.add(1, 'month');
+    }
+
+    var sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0;
+    var lst = [];
+
+    const date = req.query.date;
+    if (date !== undefined){
+        lst = date.split("-");
+        lst[0] = parseInt(lst[0]);
+        lst[1] = parseInt(lst[1]);
+        const obj = await ProductModels.getAllOutcome(lst[0], lst[1]);
+        sum1 = obj[0].recordset[0]['SUM'];
+        sum2 = obj[1].recordset[0]['SUM'];
+        sum3 = obj[2].recordset[0]['SUM'];
+        sum4 = obj[3].recordset[0]['SUM'];
+    }
+
+    res.render("statistic", {
+        layout: "bs4.hbs",
+        dates: result,
+        year: lst[0],
+        month: lst[1],
+        TongHoaDon: sum1,
+        TongDoiHang: sum2,
+        TongNhapHang: sum3,
+        TongXuatHang: sum4,
+        TongChiPhi: parseInt(sum1) + parseInt(sum2) - parseInt(sum3) + parseInt(sum4)
+    });
+});
+
+app.get('/admin/statistic/bill', async function (req, res){
+
+});
+
+app.get('/admin/statistic/exchange', async function (req, res){
+
+});
+
+app.get('/admin/statistic/import', async function (req, res){
+
+});
+
+app.get('/admin/statistic/export', async function (req, res){
+
+});
+
 app.get("/admin/products/:page", async function (req, res){
     var page = req.params.page || 1;
     page = parseInt(page);
@@ -158,7 +219,7 @@ app.post("/login", async function (req, res){
         else{
             console.log("Nhan vien");
             const employee = await AuthModels.findEmployeeById(obj.recordset[0].MaNhanVien);
-            if (employee.recordset[0].LoaiNhanVien === "Quản lý")
+            if (employee.recordset[0].LoaiNhanVien === "Quản Lý")
                 res.redirect('/admin/products/1');
             else
                 res.render("staff");
