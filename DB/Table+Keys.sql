@@ -152,6 +152,7 @@ create table SANPHAM
 	MoTaChiTiet text,
 	LoaiSanPham int,
 	TinhTrang bit,
+	GiaSanPham int,
 	constraint PK_SP primary key(MaSanPham)
 )
 
