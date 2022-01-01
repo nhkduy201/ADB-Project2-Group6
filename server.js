@@ -183,19 +183,95 @@ app.get("/admin/products/statistic", async function(req, res){
 });
 
 app.get('/admin/statistic/bill', async function (req, res){
-
+    const year = req.query.year;
+    const month = req.query.month;
+    var page = req.query.page;
+    page = parseInt(page);
+    if (page < 1)
+        page = 1;
+    const offset = (page-1)*10;
+    const obj = await ProductModels.getDetailBill(year, month, 10, offset);
+    var bills = obj.recordset;
+    for (var i = 0; i < bills.length; i++) {
+        bills[i].NgayLapHoaDon = moment(bills[i].NgayLapHoaDon).format('DD/MM/YYYY HH:mm:ss');
+    }
+    res.render('bill', {
+        layout: "bs4.hbs",
+        bills,
+        month,
+        year,
+        next: page+1,
+        prev: page-1
+    });
 });
 
 app.get('/admin/statistic/exchange', async function (req, res){
-
+    const year = req.query.year;
+    const month = req.query.month;
+    var page = req.query.page;
+    page = parseInt(page);
+    if (page < 1)
+        page = 1;
+    const offset = (page-1)*10;
+    const obj = await ProductModels.getDetailExchange(year, month, 10, offset);
+    var exchanges = obj.recordset;
+    for (var i = 0; i < exchanges.length; i++) {
+        exchanges[i].NgayDoiHang = moment(exchanges[i].NgayDoiHang).format('DD/MM/YYYY HH:mm:ss');
+    }
+    res.render('exchange', {
+        layout: "bs4.hbs",
+        exchanges,
+        month,
+        year,
+        next: page+1,
+        prev: page-1
+    });
 });
 
 app.get('/admin/statistic/import', async function (req, res){
-
+    const year = req.query.year;
+    const month = req.query.month;
+    var page = req.query.page;
+    page = parseInt(page);
+    if (page < 1)
+        page = 1;
+    const offset = (page-1)*10;
+    const obj = await ProductModels.getDetailImport(year, month, 10, offset);
+    var imports = obj.recordset;
+    for (var i = 0; i < imports.length; i++) {
+        imports[i].NgayNhapHang = moment(imports[i].NgayNhapHang).format('DD/MM/YYYY HH:mm:ss');
+    }
+    res.render('import', {
+        layout: "bs4.hbs",
+        imports,
+        month,
+        year,
+        next: page+1,
+        prev: page-1
+    });
 });
 
 app.get('/admin/statistic/export', async function (req, res){
-
+    const year = req.query.year;
+    const month = req.query.month;
+    var page = req.query.page;
+    page = parseInt(page);
+    if (page < 1)
+        page = 1;
+    const offset = (page-1)*10;
+    const obj = await ProductModels.getDetailExport(year, month, 10, offset);
+    var exports = obj.recordset;
+    for (var i = 0; i < exports.length; i++) {
+        exports[i].NgayXuatHang = moment(exports[i].NgayXuatHang).format('DD/MM/YYYY HH:mm:ss');
+    }
+    res.render('export', {
+        layout: "bs4.hbs",
+        exports,
+        month,
+        year,
+        next: page+1,
+        prev: page-1
+    });
 });
 
 app.get("/admin/products/:page", async function (req, res){

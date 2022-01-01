@@ -151,6 +151,30 @@ export default {
         const obj3 = await sql.query`select sum(cast(TongTien as BIGINT)) as SUM from PhieuNhapHang where Year(NgayNhapHang) = ${year} and Month(NgayNhapHang) = ${month}`;
         const obj4 = await sql.query`select sum(cast(TongTien as BIGINT)) as SUM from PhieuXuatHang where Year(NgayXuatHang) = ${year} and Month(NgayXuatHang) = ${month}`;
         return [obj1, obj2, obj3, obj4];
+    },
+
+    async getDetailBill(year, month, limit, offset){
+        await sql.connect(sqlConfig);
+        const obj = await sql.query`select * from HoaDon where Year(NgayLapHoaDon) = ${year} and Month(NgayLapHoaDon) = ${month} order by NgayLapHoaDon DESC offset ${offset} rows fetch next ${limit} rows only`;
+        return obj;
+    },
+
+    async getDetailExchange(year, month, limit, offset){
+        await sql.connect(sqlConfig);
+        const obj = await sql.query`select * from PhieuDoiHang where Year(NgayDoiHang) = ${year} and Month(NgayDoiHang) = ${month} order by NgayDoiHang DESC offset ${offset} rows fetch next ${limit} rows only`;
+        return obj;
+    },
+
+    async getDetailImport(year, month, limit, offset){
+        await sql.connect(sqlConfig);
+        const obj = await sql.query`select * from PhieuNhapHang where Year(NgayNhapHang) = ${year} and Month(NgayNhapHang) = ${month} order by NgayNhapHang DESC offset ${offset} rows fetch next ${limit} rows only`;
+        return obj;
+    },
+
+    async getDetailExport(year, month, limit, offset){
+        await sql.connect(sqlConfig);
+        const obj = await sql.query`select * from PhieuXuatHang where Year(NgayXuatHang) = ${year} and Month(NgayXuatHang) = ${month} order by NgayXuatHang DESC offset ${offset} rows fetch next ${limit} rows only`;
+        return obj;
     }
   ,
 
