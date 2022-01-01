@@ -323,8 +323,8 @@ app.post("/login", async function (req, res) {
   const password = req.body.txtPassword;
   const obj = await AuthModels.getAllAccount(username, password);
   if (obj.rowsAffected[0] !== 0) {
-    req.session.auth = true;
     if (obj.recordset[0].MaKhachHang !== null) {
+      req.session.auth = true;
       const obj2 = await AuthModels.getUserByID(obj.recordset[0].MaKhachHang);
       req.session.authUser = obj2.recordset[0];
       res.redirect("/products/customer/bycat?");
