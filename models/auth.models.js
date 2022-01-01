@@ -67,4 +67,10 @@ export default {
       await sql.query`select KH2.MaKhachHang, KH2.HoTenKhachHang, (select count(*) from KHACHHANG KH1 join GIOHANG GH on KH1.MaKhachHang = GH.MaKhachHang where KH1.MaKhachHang = ${id} and GH.TinhTrang = 1) SoLuongLoaiHangTrongGio from KHACHHANG KH2 where KH2.MaKhachHang = ${id}`;
     return obj;
   },
+  async getUserDetailByID(id) {
+    await sql.connect(sqlConfig);
+    const obj =
+      await sql.query`select KH.*, TK.TenDangNhap from KHACHHANG KH join TAIKHOANDANGNHAP TK on KH.MaKhachHang = TK.MaKhachHang where KH.MaKhachHang = ${id}`;
+    return obj;
+  },
 };

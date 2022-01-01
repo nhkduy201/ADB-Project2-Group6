@@ -13,7 +13,7 @@ export default function (app) {
     }
     res.locals.auth = req.session.auth;
     res.locals.authUser = req.session.authUser;
-    if (typeof res.locals.authUser !== "undefined") {
+    if (res.locals.authUser) {
       const obj = await AuthModels.getUserByID(res.locals.authUser.MaKhachHang);
       res.locals.authUser = obj.recordset[0];
     }

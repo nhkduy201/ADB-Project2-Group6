@@ -55,11 +55,20 @@
   {{/if}}
   <div class="card-footer text-muted d-flex justify-content-between">
     <span>{{!-- 2 days ago --}}</span>
+    {{#unless this.empty}}
     <form action="/cart/checkout" method="post">
       <button type="submit" class="btn btn-outline-success">
         <i class="fa fa-check" aria-hidden="true"></i>
         Check out
       </button>
     </form>
+    {{/unless}}
   </div>
 </div>
+{{#if this.empty}}
+  {{#if this.clear}}
+    <div class="alert alert-success mt-2" role="alert">
+      Thanh toán thành công
+    </div>
+  {{/if}}
+{{/if}}
