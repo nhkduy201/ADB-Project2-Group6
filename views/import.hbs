@@ -1,0 +1,37 @@
+<div class="card">
+    <h4 class="card-header d-flex justify-content-between">
+        Imports
+    </h4>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date</th>
+            <th scope="col">Employee</th>
+            <th scope="col">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each this.imports}}
+            <tr>
+                <th scope="row">{{MaPhieuNhapHang}}</th>
+                <td>{{NgayNhapHang}}</td>
+                <td>{{MaNhanVien}}</td>
+                <td>{{TongTien}}</td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="card-footer text-muted">
+        <div class="d-flex justify-content-between">
+            <a href="/admin/statistic/import?year={{this.year}}&month={{this.month}}&page={{this.prev}}" class="btn btn-success" role="button">
+            <i class="fa fa-backward" aria-hidden="true"></i>
+            Prev
+            </a>
+            <a href="/admin/statistic/import?year={{this.year}}&month={{this.month}}&page={{this.next}}" class="btn btn-primary" role="button">
+            <i class="fa fa-forward" aria-hidden="true"></i>
+            Next
+            </a>
+        </div>
+    </div>
+</div>
