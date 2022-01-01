@@ -12,7 +12,7 @@ export default function (app) {
           return numeral(val).format("0,0");
         },
         format_percent(val) {
-          return numeral(val).format("'0.0%");
+          return numeral(val).format("0.0%");
         },
         section: hbs_sections(),
       },

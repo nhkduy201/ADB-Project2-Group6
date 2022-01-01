@@ -122,8 +122,37 @@ export default {
         await sql.query`update SANPHAM set TenSanPham = ${name}, MaLoai = ${type},
                         MaNhaCungCap = ${supplier}, QuocGiaSanXuat = ${country}, KichThuoc = ${size},
                         DonViDoLuong = ${count}, MoTaChiTiet = ${des} where MaSanPham = ${id}`;
+        }
+    },
+
+    async getAllPriceHistory(id, limit){
+        await sql.connect(sqlConfig);
+        var obj;
+        if (limit === 5)
+            obj = await sql.query`select * from LICHSUGIA where MaSanPham = ${id} order by ThoiDiemThayDoiGia DESC offset 0 rows fetch next ${limit} rows only`;
+        else
+            obj = await sql.query`select * from LICHSUGIA where MaSanPham = ${id} order by ThoiDiemThayDoiGia DESC`;
+        return obj;
+    },
+
+    async getMaxDate(){
+        await sql.connect(sqlConfig);
+        const obj1 = await sql.query`select max(NgayLapHoaDon) from HoaDon`;
+        const obj2 = await sql.query`select max(NgayDoiHang) from PhieuDoiHang`;
+        const obj3 = await sql.query`select max(NgayNhapHang) from PhieuNhapHang`;
+        const obj4 = await sql.query`select max(NgayXuatHang) from PhieuXuatHang`;
+        return [obj1, obj2, obj3, obj4];
+    },
+
+    async getAllOutcome(year, month){
+        await sql.connect(sqlConfig);
+        const obj1 = await sql.query`select sum(cast(TongTien as BIGINT)) as SUM from HoaDon where Year(NgayLapHoaDon) = ${year} and Month(NgayLapHoaDon) = ${month}`;
+        const obj2 = await sql.query`select sum(cast(TongTien as BIGINT)) as SUM from PhieuDoiHang where Year(NgayDoiHang) = ${year} and Month(NgayDoiHang) = ${month}`;
+        const obj3 = await sql.query`select sum(cast(TongTien as BIGINT)) as SUM from PhieuNhapHang where Year(NgayNhapHang) = ${year} and Month(NgayNhapHang) = ${month}`;
+        const obj4 = await sql.query`select sum(cast(TongTien as BIGINT)) as SUM from PhieuXuatHang where Year(NgayXuatHang) = ${year} and Month(NgayXuatHang) = ${month}`;
+        return [obj1, obj2, obj3, obj4];
     }
-  },
+  ,
 
   async getAllPriceHistory(id, limit) {
     await sql.connect(sqlConfig);
