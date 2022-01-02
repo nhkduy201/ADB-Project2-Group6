@@ -33,7 +33,7 @@ app.get("/register", function (req, res) {
   res.render("register");
 });
 
-app.get("/admin/products/add", async function (req, res) {
+app.get("/admin/products/add", authMdw.adminAuth, async function (req, res) {
   const obj1 = await ProductModels.getAllProductType();
   const typeList = obj1.recordset;
   const obj2 = await ProductModels.getAllSupplier();
@@ -45,7 +45,7 @@ app.get("/admin/products/add", async function (req, res) {
   });
 });
 
-app.post("/admin/products/add", async function (req, res) {
+app.post("/admin/products/add", authMdw.adminAuth, async function (req, res) {
   const name = req.body.ProName;
   const obj1 = req.body.ProType;
   const obj2 = req.body.ProSup;
@@ -74,7 +74,7 @@ app.post("/admin/products/add", async function (req, res) {
   res.redirect("/admin/products/1");
 });
 
-app.get("/admin/products/edit", async function (req, res) {
+app.get("/admin/products/edit", authMdw.adminAuth, async function (req, res) {
   const id = req.query.id;
   const obj = await ProductModels.findProductById(id);
   const product = obj.recordset[0];
@@ -103,13 +103,13 @@ app.get("/admin/products/edit", async function (req, res) {
   });
 });
 
-app.post("/admin/products/del", async function (req, res) {
+app.post("/admin/products/del", authMdw.adminAuth, async function (req, res) {
   const id = req.body.ProID;
   const ret = ProductModels.delProduct(id);
   res.redirect("/admin/products/1");
 });
 
-app.post("/admin/products/patch", async function (req, res) {
+app.post("/admin/products/patch", authMdw.adminAuth, async function (req, res) {
   const id = req.body.ProID;
   const name = req.body.ProName;
   const obj1 = req.body.ProType;
@@ -140,72 +140,80 @@ app.post("/admin/products/patch", async function (req, res) {
   res.redirect("/admin/products/1");
 });
 
-app.get("/admin/products/history", async function (req, res) {
-  const id = req.query.id;
-  const show = req.query.show || "top-5";
-  if (show === "top-5") var limit = 5;
-  const obj = await ProductModels.getAllPriceHistory(id, limit);
-  var products = obj.recordset;
-  for (var i = 0; i < products.length; i++) {
-    products[i].No = i + 1;
+app.get(
+  "/admin/products/history",
+  authMdw.adminAuth,
+  async function (req, res) {
+    const id = req.query.id;
+    const show = req.query.show || "top-5";
+    if (show === "top-5") var limit = 5;
+    const obj = await ProductModels.getAllPriceHistory(id, limit);
+    var products = obj.recordset;
+    for (var i = 0; i < products.length; i++) {
+      products[i].No = i + 1;
+    }
+    res.render("history", {
+      layout: "bs4.hbs",
+      products,
+      id,
+    });
   }
-  res.render("history", {
-    layout: "bs4.hbs",
-    products,
-    id,
-  });
-});
+);
 
-app.get("/admin/products/statistic", async function (req, res) {
-  const obj = await ProductModels.getMaxDate();
-  const maxDate1 = moment(obj[0].recordset[0][""]);
-  const maxDate2 = moment(obj[1].recordset[0][""]);
-  const maxDate3 = moment(obj[2].recordset[0][""]);
-  const maxDate4 = moment(obj[3].recordset[0][""]);
+app.get(
+  "/admin/products/statistic",
+  authMdw.adminAuth,
+  async function (req, res) {
+    const obj = await ProductModels.getMaxDate();
+    const maxDate1 = moment(obj[0].recordset[0][""]);
+    const maxDate2 = moment(obj[1].recordset[0][""]);
+    const maxDate3 = moment(obj[2].recordset[0][""]);
+    const maxDate4 = moment(obj[3].recordset[0][""]);
 
-  var startDate = moment("2020-01-01");
-  const endDate = moment.max(maxDate1, maxDate2, maxDate3, maxDate4);
+    var startDate = moment("2020-01-01");
+    const endDate = moment.max(maxDate1, maxDate2, maxDate3, maxDate4);
 
-  var result = [];
+    var result = [];
 
-  while (startDate.isBefore(endDate)) {
-    result.push(startDate.format("YYYY-MM"));
-    startDate.add(1, "month");
+    while (startDate.isBefore(endDate)) {
+      result.push(startDate.format("YYYY-MM"));
+      startDate.add(1, "month");
+    }
+
+    var sum1 = 0,
+      sum2 = 0,
+      sum3 = 0,
+      sum4 = 0;
+    var lst = [];
+
+    const date = req.query.date;
+    if (date !== undefined) {
+      lst = date.split("-");
+      lst[0] = parseInt(lst[0]);
+      lst[1] = parseInt(lst[1]);
+      const obj = await ProductModels.getAllOutcome(lst[0], lst[1]);
+      sum1 = obj[0].recordset[0]["SUM"];
+      sum2 = obj[1].recordset[0]["SUM"];
+      sum3 = obj[2].recordset[0]["SUM"];
+      sum4 = obj[3].recordset[0]["SUM"];
+    }
+
+    res.render("statistic", {
+      layout: "bs4.hbs",
+      dates: result,
+      year: lst[0],
+      month: lst[1],
+      TongHoaDon: sum1,
+      TongDoiHang: sum2,
+      TongNhapHang: sum3,
+      TongXuatHang: sum4,
+      TongChiPhi:
+        parseInt(sum1) + parseInt(sum2) - parseInt(sum3) + parseInt(sum4),
+    });
   }
+);
 
-  var sum1 = 0,
-    sum2 = 0,
-    sum3 = 0,
-    sum4 = 0;
-  var lst = [];
-
-  const date = req.query.date;
-  if (date !== undefined) {
-    lst = date.split("-");
-    lst[0] = parseInt(lst[0]);
-    lst[1] = parseInt(lst[1]);
-    const obj = await ProductModels.getAllOutcome(lst[0], lst[1]);
-    sum1 = obj[0].recordset[0]["SUM"];
-    sum2 = obj[1].recordset[0]["SUM"];
-    sum3 = obj[2].recordset[0]["SUM"];
-    sum4 = obj[3].recordset[0]["SUM"];
-  }
-
-  res.render("statistic", {
-    layout: "bs4.hbs",
-    dates: result,
-    year: lst[0],
-    month: lst[1],
-    TongHoaDon: sum1,
-    TongDoiHang: sum2,
-    TongNhapHang: sum3,
-    TongXuatHang: sum4,
-    TongChiPhi:
-      parseInt(sum1) + parseInt(sum2) - parseInt(sum3) + parseInt(sum4),
-  });
-});
-
-app.get("/admin/statistic/bill", async function (req, res) {
+app.get("/admin/statistic/bill", authMdw.adminAuth, async function (req, res) {
   const year = req.query.year;
   const month = req.query.month;
   var page = req.query.page;
@@ -224,64 +232,76 @@ app.get("/admin/statistic/bill", async function (req, res) {
   });
 });
 
-app.get("/admin/statistic/exchange", async function (req, res) {
-  const year = req.query.year;
-  const month = req.query.month;
-  var page = req.query.page;
-  page = parseInt(page);
-  if (page < 1) page = 1;
-  const offset = (page - 1) * 10;
-  const obj = await ProductModels.getDetailExchange(year, month, 10, offset);
-  var exchanges = obj.recordset;
-  res.render("exchange", {
-    layout: "bs4.hbs",
-    exchanges,
-    month,
-    year,
-    next: page + 1,
-    prev: page - 1,
-  });
-});
+app.get(
+  "/admin/statistic/exchange",
+  authMdw.adminAuth,
+  async function (req, res) {
+    const year = req.query.year;
+    const month = req.query.month;
+    var page = req.query.page;
+    page = parseInt(page);
+    if (page < 1) page = 1;
+    const offset = (page - 1) * 10;
+    const obj = await ProductModels.getDetailExchange(year, month, 10, offset);
+    var exchanges = obj.recordset;
+    res.render("exchange", {
+      layout: "bs4.hbs",
+      exchanges,
+      month,
+      year,
+      next: page + 1,
+      prev: page - 1,
+    });
+  }
+);
 
-app.get("/admin/statistic/import", async function (req, res) {
-  const year = req.query.year;
-  const month = req.query.month;
-  var page = req.query.page;
-  page = parseInt(page);
-  if (page < 1) page = 1;
-  const offset = (page - 1) * 10;
-  const obj = await ProductModels.getDetailImport(year, month, 10, offset);
-  var imports = obj.recordset;
-  res.render("import", {
-    layout: "bs4.hbs",
-    imports,
-    month,
-    year,
-    next: page + 1,
-    prev: page - 1,
-  });
-});
+app.get(
+  "/admin/statistic/import",
+  authMdw.adminAuth,
+  async function (req, res) {
+    const year = req.query.year;
+    const month = req.query.month;
+    var page = req.query.page;
+    page = parseInt(page);
+    if (page < 1) page = 1;
+    const offset = (page - 1) * 10;
+    const obj = await ProductModels.getDetailImport(year, month, 10, offset);
+    var imports = obj.recordset;
+    res.render("import", {
+      layout: "bs4.hbs",
+      imports,
+      month,
+      year,
+      next: page + 1,
+      prev: page - 1,
+    });
+  }
+);
 
-app.get("/admin/statistic/export", async function (req, res) {
-  const year = req.query.year;
-  const month = req.query.month;
-  var page = req.query.page;
-  page = parseInt(page);
-  if (page < 1) page = 1;
-  const offset = (page - 1) * 10;
-  const obj = await ProductModels.getDetailExport(year, month, 10, offset);
-  var exports = obj.recordset;
-  res.render("export", {
-    layout: "bs4.hbs",
-    exports,
-    month,
-    year,
-    next: page + 1,
-    prev: page - 1,
-  });
-});
+app.get(
+  "/admin/statistic/export",
+  authMdw.adminAuth,
+  async function (req, res) {
+    const year = req.query.year;
+    const month = req.query.month;
+    var page = req.query.page;
+    page = parseInt(page);
+    if (page < 1) page = 1;
+    const offset = (page - 1) * 10;
+    const obj = await ProductModels.getDetailExport(year, month, 10, offset);
+    var exports = obj.recordset;
+    res.render("export", {
+      layout: "bs4.hbs",
+      exports,
+      month,
+      year,
+      next: page + 1,
+      prev: page - 1,
+    });
+  }
+);
 
-app.get("/admin/products/:page", async function (req, res) {
+app.get("/admin/products/:page", authMdw.adminAuth, async function (req, res) {
   var page = req.params.page || 1;
   page = parseInt(page);
   if (page < 1) page = 1;
@@ -296,12 +316,19 @@ app.get("/admin/products/:page", async function (req, res) {
   });
 });
 
+function clearAuth(req) {
+  req.session.customerAuth = false;
+  req.session.staffAuth = false;
+  req.session.adminAuth = false;
+}
+
 app.post("/login", async function (req, res) {
   const username = req.body.txtUsername;
   const password = req.body.txtPassword;
   const obj = await AuthModels.getAllAccount(username, password);
   if (obj.rowsAffected[0] !== 0) {
     if (obj.recordset[0].MaKhachHang !== null) {
+      clearAuth(req);
       req.session.customerAuth = true;
       req.session.authUser = { MaKhachHang: obj.recordset[0].MaKhachHang };
       res.redirect("/products/customer/bycat?");
@@ -310,17 +337,24 @@ app.post("/login", async function (req, res) {
       const employee = await AuthModels.findEmployeeById(
         obj.recordset[0].MaNhanVien
       );
-      if (employee.recordset[0].LoaiNhanVien === "Quản Lý")
+      if (employee.recordset[0].LoaiNhanVien === "Quản Lý") {
+        clearAuth(req);
+        req.session.adminAuth = true;
         res.redirect("/admin/products/1");
-      else {
+      } else {
         const obj2 = await AuthModels.findEmployeeById(
           obj.recordset[0].MaNhanVien
         );
+        clearAuth(req);
         req.session.staffAuth = true;
         req.session.authUser = obj2.recordset[0];
         res.redirect("/salary/history/1");
       }
     }
+  } else {
+    res.render("login", {
+      err_message: true,
+    });
   }
 });
 

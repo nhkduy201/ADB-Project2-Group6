@@ -10,5 +10,11 @@ export default {
       return res.redirect("/");
     }
     next();
+  },
+  adminAuth(req, res, next) {
+    if (typeof req.session == "undefined" || req.session.adminAuth === false) {
+      return res.redirect("/");
+    }
+    next();
   }
 }

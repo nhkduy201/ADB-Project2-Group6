@@ -9,15 +9,20 @@ export default function (app) {
     if (typeof req.session.staffAuth === "undefined") {
       req.session.staffAuth = false;
     }
-    res.locals.customerAuth = req.session.customerAuth;
-    if (res.locals.customerAuth) {
+    if (typeof req.session.adminAuth === "undefined") {
+      req.session.adminAuth = false;
+    }
+    if (req.session.customerAuth) {
+      res.locals.customerAuth = req.session.customerAuth;
       const obj = await AuthModels.getUserByID(
         req.session.authUser.MaKhachHang
       );
       res.locals.authUser = obj.recordset[0];
-    } else {
+    } else if(req.session.staffAuth) {
       res.locals.staffAuth = req.session.staffAuth;
       res.locals.authUser = req.session.authUser;
+    } else {
+      res.locals.adminAuth = req.session.adminAuth;
     }
     next();
   });
