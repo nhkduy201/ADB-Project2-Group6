@@ -16,10 +16,10 @@
         {{#each this.bills}}
             <tr>
                 <th scope="row">{{MaHoaDon}}</th>
-                <td>{{NgayLapHoaDon}}</td>
+                <td>{{format_date NgayLapHoaDon}}</td>
                 <td>{{MaKhachHang}}</td>
                 <td>{{MaNhanVien}}</td>
-                <td>{{TongTien}}</td>
+                <td>{{format_price TongTien}}</td>
             </tr>
         {{/each}}
         </tbody>

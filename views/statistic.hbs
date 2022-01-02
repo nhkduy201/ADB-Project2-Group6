@@ -30,23 +30,23 @@
         <tbody>
             <tr>
                 <td><a href="/admin/statistic/bill?year={{this.year}}&month={{this.month}}&page=1">Hóa Đơn</a></td>
-                <td>{{format_number this.TongHoaDon}}</td>
+                <td>{{format_price this.TongHoaDon}}</td>
             </tr>
             <tr>
                 <td><a href="/admin/statistic/exchange?year={{this.year}}&month={{this.month}}&page=1">Đổi hàng</a></td>
-                <td>{{format_number this.TongDoiHang}}</td>
+                <td>{{format_price this.TongDoiHang}}</td>
             </tr>
             <tr>
                 <td><a href="/admin/statistic/import?year={{this.year}}&month={{this.month}}&page=1">Nhập hàng</a></td>
-                <td>{{format_number this.TongNhapHang}}</td>
+                <td>{{format_price this.TongNhapHang}}</td>
             </tr>
             <tr>
                 <td><a href="/admin/statistic/export?year={{this.year}}&month={{this.month}}&page=1">Xuất hàng</a></td>
-                <td>{{format_number this.TongXuatHang}}</td>
+                <td>{{format_price this.TongXuatHang}}</td>
             </tr>
             <tr>
                 <th scope="row">Tổng chi phí</th>
-                <td>{{format_number this.TongChiPhi}}</td>
+                <td>{{format_price this.TongChiPhi}}</td>
             </tr>
         </tbody>
     </table>

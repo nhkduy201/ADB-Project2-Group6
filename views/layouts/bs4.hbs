@@ -71,9 +71,6 @@
                 </li>
             {{else}}
                 <li class="nav-item active">
-                    <a class="nav-link" href="/register">
-                        <i class="fa fa-user-plus" aria-hidden="true"></i>
-                        Register
                     <a class="nav-link" href="/admin/products/statistic">
                         <i class="fa fa-line-chart" aria-hidden="true"></i>
                         Statistic
@@ -98,7 +95,7 @@
                 </h4>
                 <div class="list-group list-group-flush">
                     {{#each ParentType}}
-                        <a href="/products/admin/bycat?id={{MaLoai}}&page=1" class="list-group-item list-group-item-action {{#if isActive}} active {{/if}}">
+                        <a href="/products/bycat?id={{MaLoai}}&page=1" class="list-group-item list-group-item-action {{#if isActive}} active {{/if}}">
                             <i class="fa fa-caret-right" aria-hidden="true"></i>
                             {{TenLoai}}
                         </a>

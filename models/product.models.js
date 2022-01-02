@@ -176,17 +176,4 @@ export default {
         const obj = await sql.query`select * from PhieuXuatHang where Year(NgayXuatHang) = ${year} and Month(NgayXuatHang) = ${month} order by NgayXuatHang DESC offset ${offset} rows fetch next ${limit} rows only`;
         return obj;
     }
-  ,
-
-  async getAllPriceHistory(id, limit) {
-    await sql.connect(sqlConfig);
-    var obj;
-    if (limit === 5)
-      obj =
-        await sql.query`select * from LICHSUGIA where MaSanPham = ${id} order by ThoiDiemThayDoiGia DESC offset 0 rows fetch next ${limit} rows only`;
-    else
-      obj =
-        await sql.query`select * from LICHSUGIA where MaSanPham = ${id} order by ThoiDiemThayDoiGia DESC`;
-    return obj;
-  },
 };

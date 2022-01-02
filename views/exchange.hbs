@@ -16,10 +16,10 @@
         {{#each this.exchanges}}
             <tr>
                 <th scope="row">{{MaPhieuDoiHang}}</th>
-                <td>{{NgayDoiHang}}</td>
+                <td>{{format_date NgayDoiHang}}</td>
                 <td>{{MaKhachHang}}</td>
                 <td>{{MaNhanVien}}</td>
-                <td>{{TongTien}}</td>
+                <td>{{format_price TongTien}}</td>
             </tr>
         {{/each}}
         </tbody>

@@ -21,8 +21,8 @@
         {{#each this.products}}
             <tr>
                 <th scope="row">{{No}}</th>
-                <td>{{ThoiDiemThayDoiGia}}</td>
-                <td>{{GiaTaiThoiDiem}}</td>
+                <td>{{format_date ThoiDiemThayDoiGia}}</td>
+                <td>{{format_price GiaTaiThoiDiem}}</td>
             </tr>
         {{/each}}
         </tbody>

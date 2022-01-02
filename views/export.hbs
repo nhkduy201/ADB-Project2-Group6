@@ -15,9 +15,9 @@
         {{#each this.exports}}
             <tr>
                 <th scope="row">{{MaPhieuXuatHang}}</th>
-                <td>{{NgayXuatHang}}</td>
+                <td>{{format_date NgayXuatHang}}</td>
                 <td>{{MaNhanVien}}</td>
-                <td>{{TongTien}}</td>
+                <td>{{format_price TongTien}}</td>
             </tr>
         {{/each}}
         </tbody>
