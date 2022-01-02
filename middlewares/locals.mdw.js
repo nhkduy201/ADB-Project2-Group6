@@ -3,14 +3,21 @@ import AuthModels from "../models/auth.models.js";
 
 export default function (app) {
   app.use(async function (req, res, next) {
-    if (typeof req.session.auth === "undefined") {
-      req.session.auth = false;
+    if (typeof req.session.customerAuth === "undefined") {
+      req.session.customerAuth = false;
     }
-    res.locals.auth = req.session.auth;
-    res.locals.authUser = req.session.authUser;
-    if (res.locals.authUser) {
-      const obj = await AuthModels.getUserByID(res.locals.authUser.MaKhachHang);
+    if (typeof req.session.staffAuth === "undefined") {
+      req.session.staffAuth = false;
+    }
+    res.locals.customerAuth = req.session.customerAuth;
+    if (res.locals.customerAuth) {
+      const obj = await AuthModels.getUserByID(
+        req.session.authUser.MaKhachHang
+      );
       res.locals.authUser = obj.recordset[0];
+    } else {
+      res.locals.staffAuth = req.session.staffAuth;
+      res.locals.authUser = req.session.authUser;
     }
     next();
   });

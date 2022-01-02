@@ -9,6 +9,7 @@ import authMdw from "./middlewares/auth.mdw.js";
 import AuthModels from "./models/auth.models.js";
 import ProductModels from "./models/product.models.js";
 import CartModels from "./models/cart.models.js";
+import SalaryModels from "./models/salary.models.js";
 const app = express();
 
 app.use(morgan("dev"));
@@ -301,11 +302,9 @@ app.post("/login", async function (req, res) {
   const obj = await AuthModels.getAllAccount(username, password);
   if (obj.rowsAffected[0] !== 0) {
     if (obj.recordset[0].MaKhachHang !== null) {
-      req.session.auth = true;
-      const obj2 = await AuthModels.getUserByID(obj.recordset[0].MaKhachHang);
-      req.session.authUser = obj2.recordset[0];
+      req.session.customerAuth = true;
+      req.session.authUser = { MaKhachHang: obj.recordset[0].MaKhachHang };
       res.redirect("/products/customer/bycat?");
-      res.render("customer");
     } else {
       console.log("Nhan vien");
       const employee = await AuthModels.findEmployeeById(
@@ -313,7 +312,14 @@ app.post("/login", async function (req, res) {
       );
       if (employee.recordset[0].LoaiNhanVien === "Quản Lý")
         res.redirect("/admin/products/1");
-      else res.render("staff");
+      else {
+        const obj2 = await AuthModels.findEmployeeById(
+          obj.recordset[0].MaNhanVien
+        );
+        req.session.staffAuth = true;
+        req.session.authUser = obj2.recordset[0];
+        res.redirect("/salary/history/1");
+      }
     }
   }
 });
@@ -355,7 +361,8 @@ app.get("/profile", async function (req, res) {
 });
 
 app.post("/logout", async function (req, res) {
-  req.session.auth = false;
+  req.session.staffAuth = false;
+  req.session.customerAuth = false;
   req.session.authUser = null;
   res.redirect("/");
 });
@@ -385,10 +392,16 @@ app.get("/products/customer/bycat", async function (req, res) {
   var page = req.query.page || 1;
   const subType = await ProductModels.findSubType(type);
   const lst = subType.recordset;
+  const limit = 12;
   page = parseInt(page);
   if (page < 1) page = 1;
   const offset = (page - 1) * 10;
-  const obj = await ProductModels.findProductByTypeId(type, 10, offset, "on");
+  const obj = await ProductModels.findProductByTypeId(
+    type,
+    limit,
+    offset,
+    "on"
+  );
   const products = obj.recordset.map((x) => {
     x.GiaHienTai = parseInt(x.GiaHienTai * (1 - x.PhanTramGiamGia));
     return x;
@@ -398,8 +411,8 @@ app.get("/products/customer/bycat", async function (req, res) {
     layout: "bs4customer.hbs",
     subType: lst,
     products,
-    next: page + 1,
-    prev: page - 1,
+    next: products.length == limit ? page + 1 : page,
+    prev: page > 1 ? page - 1 : page,
     type,
   });
 });
@@ -420,7 +433,7 @@ app.get("/products/detail/:id", async function (req, res) {
   });
 });
 
-app.get("/cart", authMdw, async function (req, res) {
+app.get("/cart", authMdw.customerAuth, async function (req, res) {
   const clear = req.query.clear || 0;
   const obj = await CartModels.getAllItemInCart(
     res.locals.authUser.MaKhachHang
@@ -437,7 +450,7 @@ app.get("/cart", authMdw, async function (req, res) {
   });
 });
 
-app.post("/cart/add", authMdw, async function (req, res) {
+app.post("/cart/add", authMdw.customerAuth, async function (req, res) {
   const { id, quantity } = req.body;
   await CartModels.addItemToCart(id, res.locals.authUser.MaKhachHang, quantity);
   const obj2 = await AuthModels.getUserByID(res.locals.authUser.MaKhachHang);
@@ -445,14 +458,33 @@ app.post("/cart/add", authMdw, async function (req, res) {
   res.redirect(req.headers.referer);
 });
 
-app.post("/cart/del", authMdw, async function (req, res) {
+app.post("/cart/del", authMdw.customerAuth, async function (req, res) {
   await CartModels.del(req.body.id, res.locals.authUser.MaKhachHang);
   res.redirect(req.headers.referer);
 });
 
-app.post("/cart/checkout", authMdw, async function (req, res) {
+app.post("/cart/checkout", authMdw.customerAuth, async function (req, res) {
   await CartModels.checkout(res.locals.authUser.MaKhachHang);
   res.redirect("/cart?clear=1");
+});
+
+app.get("/salary/history/:page", authMdw.staffAuth, async function (req, res) {
+  var page = req.params.page || 1;
+  const limit = 10;
+  page = parseInt(page);
+  if (page < 1) page = 1;
+  const offset = (page - 1) * limit;
+  const obj = await SalaryModels.getSalaryHistory(
+    res.locals.authUser.MaNhanVien,
+    limit,
+    offset
+  );
+  res.render("staff", {
+    layout: "bs4staff.hbs",
+    histories: obj.recordset,
+    next: obj.recordset.length == limit ? page + 1 : page,
+    prev: page > 1 ? page - 1 : page,
+  });
 });
 
 const port = 3000;

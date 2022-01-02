@@ -1,1 +1,43 @@
-<p>Staff...</p>
+<div class="card mt-3">
+    <h4 class="card-header d-flex justify-content-between">
+        Salary History
+    </h4>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Thời điểm thay đổi</th>
+            <th scope="col">Lương</th>
+            <th scope="col">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each this.histories}}
+            <tr>
+                <th scope="row">{{format_date ThoiDiemThayDoiLuong}}</th>
+                <th scope="row">{{LuongTaiThoiDiem}}</th>
+                <td>{{TenSanPham}}</td>
+                {{!-- <td class="text-right">
+                    <a class="btn btn-sm btn-outline-danger mr-2" href="/admin/products/history?id={{MaSanPham}}" role="button">
+                        <i class="fa fa-history" aria-hidden="true"></i>
+                    </a>
+                    <a class="btn btn-sm btn-primary" href="/admin/products/edit?id={{MaSanPham}}" role="button">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a>
+                </td> --}}
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="card-footer text-muted">
+        <div class="d-flex justify-content-between">
+            <a href="/salary/history/{{this.prev}}" class="btn btn-success" role="button">
+                <i class="fa fa-backward" aria-hidden="true"></i>
+                Prev
+            </a>
+            <a href="/salary/history/{{this.next}}" class="btn btn-primary" role="button">
+                <i class="fa fa-forward" aria-hidden="true"></i>
+                Next
+            </a>
+        </div>
+    </div>
+</div>

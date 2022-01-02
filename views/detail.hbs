@@ -51,7 +51,7 @@
     <p class="card-text">
       Thời gian kết thúc: {{{this.product.ThoiGianKetThuc}}}
     </p>
-    {{#if auth}}
+    {{#if customerAuth}}
       <form action="/cart/add" method="post">
         <div class="row form-group">
           <div class="col-sm-4">

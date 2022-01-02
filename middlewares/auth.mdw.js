@@ -1,7 +1,14 @@
-export default function auth(req, res, next) {
-  if (typeof req.session == "undefined" || req.session.auth === false) {
-    // req.session.retUrl = req.originalUrl;
-    return res.redirect("/");
+export default {
+  customerAuth(req, res, next) {
+    if (typeof req.session == "undefined" || req.session.customerAuth === false) {
+      return res.redirect("/");
+    }
+    next();
+  },
+  staffAuth(req, res, next) {
+    if (typeof req.session == "undefined" || req.session.staffAuth === false) {
+      return res.redirect("/");
+    }
+    next();
   }
-  next();
 }
