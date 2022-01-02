@@ -51,7 +51,7 @@ WHERE LSP.TenLoai = N'Giày tập đi' AND NCC.TenNhaCungCap = N'Roscela'
 --Cụ thể ở đây là khách hàng có MaKhachHang=52 xem các sản phẩm trong giỏ của mình
 SELECT * 
 FROM SANPHAM SP JOIN GIOHANG GH ON SP.MaSanPham = GH.MaSanPham 
-WHERE GH.MaKhachHang = 52 and GH.TinhTrang = 0
+WHERE GH.MaKhachHang = 52 and GH.TinhTrang = 1
 
 --Phân hệ QUẢN TRỊ
 --1. Thêm, xóa, sửa sản phẩm
