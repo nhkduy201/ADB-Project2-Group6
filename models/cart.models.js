@@ -59,7 +59,7 @@ export default {
     const checkOutQuery =
       `update GIOHANG set TinhTrang = 0 where MaKhachHang = ${userID}
 declare @nextID int;
-exec ThemHoaDon '${moment(new Date()).format("YYYY-MM-DD")}', ${parseInt(
+exec ThemHoaDon '${moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}', ${parseInt(
         Math.random() * 100
       )}, ${
         parseInt(Math.random() * 10) / 10
