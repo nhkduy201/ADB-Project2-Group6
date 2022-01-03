@@ -37,7 +37,7 @@ export default {
 
   async del(proID, userID) {
     await sql.connect(sqlConfig);
-    await sql.query`delete from GIOHANG where MaKhachHang = ${userID} and MaSanPham = ${proID}`;
+    await sql.query`delete from GIOHANG where MaKhachHang = ${userID} and MaSanPham = ${proID} and TinhTrang = 1`;
   },
 
   async checkout(userID) {
@@ -59,15 +59,14 @@ export default {
     const checkOutQuery =
       `update GIOHANG set TinhTrang = 0 where MaKhachHang = ${userID}
 declare @nextID int;
-exec ThemHoaDon '${moment(new Date()).format("YYYY-MM-DD HH:mm:ss")}', ${parseInt(
-        Math.random() * 100
-      )}, ${
+exec ThemHoaDon '${moment(new Date()).format(
+        "YYYY-MM-DD HH:mm:ss"
+      )}', ${parseInt(Math.random() * 100)}, ${
         parseInt(Math.random() * 10) / 10
       }, N'Trực tuyến', ${userID}, ${parseInt(
         Math.random() * 50000
       )}, ${total}, @last = @nextID out
 select @nextID as nextID\n` + themCTStr;
-    console.log(checkOutQuery);
     const transaction = new sql.Transaction(pool);
     transaction.begin((err) => {
       if (err) {
