@@ -51,4 +51,60 @@ WHERE LSP.TenLoai = N'Giày tập đi' AND NCC.TenNhaCungCap = N'Roscela'
 --Cụ thể ở đây là khách hàng có MaKhachHang=52 xem các sản phẩm trong giỏ của mình
 SELECT * 
 FROM SANPHAM SP JOIN GIOHANG GH ON SP.MaSanPham = GH.MaSanPham 
-WHERE GH.MaKhachHang = 52 and GH.TinhTrang = 0
+WHERE GH.MaKhachHang = 52 and GH.TinhTrang = 1
+
+--Phân hệ QUẢN TRỊ
+--1. Thêm, xóa, sửa sản phẩm
+insert into SANPHAM(...) values (....)
+delete from SANPHAM where …. (thông thường xóa dựa trên MaSanPham)
+update SANPHAM set … where … (thông thường update SoLuongTon dựa trên MaSanPham)
+
+--2. Lưu vết lịch sử giá sản phẩm
+select *
+from LICHSUGIA join SANPHAM on LICHSUGIA.MaSanPham = SANPHAM.MaSanPham
+where SANPHAM.MaSanPham = 1
+
+--3. Theo dõi số lượng hàng tồn kho
+select SoLuongTon
+from SanPham
+
+--4.1. Theo dõi lịch sử nhập hàng
+select * 
+from PHIEUNHAPHANG pnh join CT_NHAPHANG ctnh on pxh.MaPhieuNhapHang = ctxh.MaPhieuNhapHang
+
+--4.2. Theo dõi lịch sử xuất hàng
+select * 
+from PHIEUXUATHANG pxh join CT_XUATHANG ctxh on pxh.MaPhieuXuatHang = ctxh.MaPhieuXuatHang
+
+--Phân hệ QUẢN LÝ
+--1. Thống kê doanh thu trong ngày
+select SUM(hd.TongTien) as TongDoanhThuNgay
+from HOADON hd
+where hd.NgayLapHoaDon = '2021-12-31'
+
+--2. Thống kê số lượng hóa đơn do nhân viên (cụ thể) lập
+select COUNT(*) as TongSoHD
+from HOADON hd
+where hd.MaNhanVien = 1053
+
+--3. Thống kê mức tiêu thụ của các sản phẩm
+select sp.MaSanPham, sp.TenSanPham, SUM(cthd.SoLuongSanPham) as SL_TieuThu
+from (SANPHAM sp join CT_HOADON cthd
+on sp.MaSanPham = cthd.MaSanPham) join HOADON hd
+on hd.MaHoaDon = cthd.MaHoaDon
+where MONTH(hd.NgayLapHoaDon) = 12
+and YEAR(hd.NgayLapHoaDon) = 2020
+group by sp.MaSanPham, sp.TenSanPham
+
+--4. Thống kê các sản phẩm có số lượng bị đổi/trả vượt qua 6 trong tháng
+select sp.MaSanPham, sp.TenSanPham
+from (SANPHAM sp join CT_DOIHANG ctdh
+on sp.MaSanPham = ctdh.MaSanPham) join PHIEUDOIHANG pdh
+on pdh.MaPhieuDoiHang = ctdh.MaPhieuDoiHang
+where MONTH(pdh.NgayDoiHang) = 12
+and YEAR(pdh.NgayDoiHang) = 2020
+and ctdh.SoLuongDoiHang < 6
+group by sp.MaSanPham, sp.TenSanPham
+
+--5. Thêm ưu đãi cho khách hàng
+insert into UUDAI (MaKhachHang, NamTriAn, HinhThucTriAn) values (50001, 2019, N'Giamgia30')
